@@ -1,3 +1,12 @@
+ .results-grid { grid-template-columns: minmax(0, 1fr) minmax(300px, .45fr) !important; align-items:start; }
+ .results-grid > section { min-width:0; }
+ .result-detail { min-width:0; overflow:hidden; }
+ .result-controls { display:flex; flex-wrap:wrap; gap:8px; }
+ .result-controls input { flex:1 1 220px; min-width:0; }
+ .rank-row { min-width:0; }
+ .rank-row small { white-space:normal !important; overflow-wrap:anywhere; line-height:1.4; }
+ .rank-row em { flex:0 0 auto; }
+ @media (max-width: 1100px) { .results-grid { grid-template-columns:minmax(0, 1fr) minmax(260px, .4fr) !important; } }
  .rank-delete,.detail-delete { border:1px solid #ef6b86; border-radius:8px; padding:8px 10px; color:#ef6b86; background:transparent; font-size:12px; font-weight:700; cursor:pointer; white-space:nowrap; }
  .rank-delete:hover,.detail-delete:hover { color:#fff; background:#b83c5a; }
  .rank-row.active { border-color:#7567ff; box-shadow:0 0 0 2px rgba(117,103,255,.18); }
