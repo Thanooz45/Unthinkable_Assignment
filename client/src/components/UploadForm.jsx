@@ -46,11 +46,19 @@ const UploadForm = () => {
         });
 
         try {
-            await api.post('/upload', formData, {
+            const { data } = await api.post('/upload', formData, {
                 headers: {
                     'Content-Type': 'multipart/form-data',
                 }
             });
+            const failed = (data.results || []).filter(result => result.status === 'failed');
+            if (failed.length === (data.results || []).length) {
+                setError(failed.map(result => `${result.original_filename}: ${result.error}`).join(' '));
+                return;
+            }
+            if (failed.length) {
+                setError(`Some resumes could not be parsed: ${failed.map(result => `${result.original_filename}: ${result.error}`).join(' ')}`);
+            }
             navigate('/dashboard');
         } catch (err) {
             setError(err.response?.data?.message || err.message || "An error occurred during upload.");
