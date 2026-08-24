@@ -1,0 +1,91 @@
+====================================================================
+SMART RESUME SCREENER - QUICK START & ARCHITECTURE GUIDE
+====================================================================
+
+1. REQUIRED API KEYS & CONFIGURATION
+--------------------------------------------------------------------
+Before running the application, you must configure your environment variables.
+
+Backend (.env):
+Location: server/.env
+Required Keys:
+- GEMINI_API_KEY: Your Google Gemini API key (Get one at Google AI Studio).
+- PORT: 5000 (The port the Express server will run on).
+- DATABASE_URL: (Optional) If left blank, it defaults to a local SQLite file (`server/database.sqlite`).
+
+Frontend (.env):
+Location: client/.env
+Required Keys:
+- VITE_API_BASE_URL: http://localhost:5000/api (Points the React app to your backend).
+
+
+2. STEPS TO RUN THE APPLICATION
+--------------------------------------------------------------------
+You will need two terminal windows open to run the frontend and backend simultaneously.
+
+Step 2.1: Start the Backend (Server)
+  a. Open Terminal 1
+  b. Navigate to the server folder: 
+     cd "d:\unthinkabale assignment submission\assignment\smart-resume-screener\server"
+  c. Ensure dependencies are installed: 
+     npm install
+  d. Ensure your `server/.env` file exists and has your GEMINI_API_KEY.
+  e. Start the server: 
+     node server.js
+  f. You should see "Server listening on port 5000".
+
+Step 2.2: Start the Frontend (Client)
+  a. Open Terminal 2
+  b. Navigate to the client folder: 
+     cd "d:\unthinkabale assignment submission\assignment\smart-resume-screener\client"
+  c. Ensure dependencies are installed: 
+     npm install
+  d. Start the Vite development server: 
+     npm run dev
+  e. Open your browser and go to: http://localhost:5173
+
+
+3. HOW IT WORKS (FLOWCHART)
+--------------------------------------------------------------------
+
+[USER] 
+  |
+  |-- 1. Pastes Job Description (JD) & Uploads Resume(s) [Frontend UI]
+  v
+[CLIENT APP (React/Vite)]
+  |
+  |-- 2. Sends multipart/form-data POST request to /api/upload
+  v
+[SERVER API (Express)]
+  |
+  |-- 3. File uploaded temporarily using `multer`
+  v
+[PDF-PARSE SERVICE]
+  |
+  |-- 4. Extracts raw text from the uploaded PDF/TXT files
+  v
+[GOOGLE GEMINI LLM - CALL #1]
+  |
+  |-- 5. Analyzes raw resume text and extracts structured JSON 
+  |      (Name, Skills, Experience, Education)
+  v
+[GOOGLE GEMINI LLM - CALL #2]
+  |
+  |-- 6. Compares the Structured Resume JSON against the Job Description.
+  |      Generates a 1-10 match score and a text justification.
+  v
+[SQLITE DATABASE]
+  |
+  |-- 7. Saves the Candidate record (including score and justification)
+  v
+[SERVER API (Express)]
+  |
+  |-- 8. Returns success status back to Client
+  v
+[CLIENT APP (React/Vite)]
+  |
+  |-- 9. Navigates User to Dashboard and fetches all ranked candidates
+  v
+[USER]
+  |-- 10. Views beautiful Dashboard showing ranked candidates!
+====================================================================
