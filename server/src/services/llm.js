@@ -22,11 +22,12 @@ const cleanJSON = (text) => {
 };
 
 const knownSkills = ['JavaScript', 'TypeScript', 'React', 'Angular', 'Vue', 'Node.js', 'Express', 'Python', 'Java', 'C++', 'C#', 'SQL', 'MongoDB', 'MySQL', 'PostgreSQL', 'Docker', 'Kubernetes', 'AWS', 'Azure', 'GCP', 'Git', 'GitHub', 'REST', 'GraphQL', 'HTML', 'CSS', 'Figma', 'Machine Learning', 'TensorFlow', 'Pandas', 'Excel', 'Power BI'];
+const escapeRegExp = value => value.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
 const fallbackProfile = text => ({
     name: text.match(/^[A-Z][A-Za-z]+(?:\s+[A-Z][A-Za-z]+){1,3}/m)?.[0] || 'Unknown candidate',
     email: text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/i)?.[0] || '',
     phone: text.match(/(?:\+?\d[\d\s().-]{8,}\d)/)?.[0] || '',
-    skills: knownSkills.filter(skill => new RegExp(`\\b${skill.replace('.', '\\.') }\\b`, 'i').test(text)),
+    skills: knownSkills.filter(skill => new RegExp(`(?:^|\\W)${escapeRegExp(skill)}(?:$|\\W)`, 'i').test(text)),
     experience_years: Number(text.match(/(\d+)\+?\s*(?:years|yrs)/i)?.[1] || 0),
     education: text.match(/(?:Bachelor|Master|B\.Tech|M\.Tech|B\.E|M\.E|BSc|MSc)[^\n]{0,120}/i)?.[0] || '',
     summary: 'Resume parsed successfully. Add a job description to generate a detailed fit analysis.'
